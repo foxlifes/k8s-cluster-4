@@ -32,11 +32,9 @@ spec:
       ingress:
         enabled: true
         hosts:
-          - host: jenkins.pbdev.pro  # Add your domain here
-            paths:
-              - path: /
-                pathType: Prefix
+          - host: jenkins.pbdev.pro  # Your desired Jenkins hostname
+        annotations:
+          nginx.ingress.kubernetes.io/rewrite-target: /
       admin:
         password: "admin"  # Correct value for admin password in Jenkins 5.x
       serviceType: LoadBalancer
-      # Add any other necessary values specific to Jenkins 5.x
