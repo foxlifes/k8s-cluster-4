@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  url: https://charts.jenkins.io
+  interval: 10m
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: jenkins
+      version: "5.0.10"  # Ensure you're using the correct version
+      sourceRef:
+        kind: HelmRepository
+        name: jenkins
+        namespace: jenkins
+  values:
+    controller:
+      ingress:
+        enabled: true
+      admin:
+        password: "admin"  # Correct value for admin password in Jenkins 5.x
+      serviceType: LoadBalancer
+      # Add any other necessary values specific to Jenkins 5.x
