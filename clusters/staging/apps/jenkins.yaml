@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  url: https://charts.jenkins.io
+  interval: 10m0s
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: jenkins
+      version: "5.8.0"  # Use the latest compatible version of the Jenkins Helm chart
+      sourceRef:
+        kind: HelmRepository
+        name: jenkins
+        namespace: jenkins
+  values:
+    controller:
+      ingress:
+        enabled: true
+        className: "nginx"
+        hosts:
+          - host: jenkins.pbdev.pro  # Replace with your domain
+            paths:
+              - path: /
+                pathType: Prefix
+      adminPassword: "admin"  # Replace with a more secure password or use a Secret
+      serviceType: LoadBalancer
