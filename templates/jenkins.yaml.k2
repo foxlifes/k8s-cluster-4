@@ -31,11 +31,6 @@ spec:
     controller:
       ingress:
         enabled: true
-        hosts:
-          - host: jenkins.pbdev.pro  # Add your domain here
-            paths:
-              - path: /
-                pathType: Prefix
       admin:
         password: "admin"  # Correct value for admin password in Jenkins 5.x
       serviceType: LoadBalancer
